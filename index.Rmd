@@ -1,0 +1,54 @@
+---
+title: 'Assignment: Classification of Weight Lifiting Exercise Feedbacks'
+author: "Rajesh Rajendran"
+date: '2022-05-31'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+In this assignment we analyse the data from a Weight Lifting Exercise activity. Create a machine learning model to predict the manner in which they did the exersice. Six young health participants were asked to perform one set of 10 repetitions of the Unilateral Dumbbell Biceps Curl in five different fashions: exactly according to the specification (Class A), throwing the elbows to the front (Class B), lifting the dumbbell only halfway (Class C), lowering the dumbbell only halfway (Class D) and throwing the hips to the front (Class E). The data for this analysis come from source <http://web.archive.org/web/20161224072740/http:/groupware.les.inf.puc-rio.br/har>. 
+
+## Data Pre-Processing
+Download the data for training & testing set
+```{r download_data, cache=TRUE}
+train <- read.csv("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv")
+test <- read.csv("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv")
+```
+
+```{r dim, echo=TRUE}
+dim(train)
+dim(test)
+```
+Training set has 19622 observations of 160 variables. Testing set has 20 observations of 160 variables.
+
+**Check for missing values:**
+```{r nas, echo=TRUE}
+col_sums_na <- colSums(is.na(train))
+col_sums_na[col_sums_na>0]
+```
+Several columns have a more than 95% of values missing. It's not possible to interpolate fill the missing values. All columns has same number of missing values. so let's omit the columns with the missing values.
+``` {r missing, echo=TRUE}
+cols_na <- names(col_sums_na[col_sums_na>0])
+training <- subset(train,select = !(names(train)%in%cols_na))
+testing <- subset(test,select = !(names(test)%in%cols_na))
+dim(training)
+dim(testing)
+```
+Let's look at the structure of the data
+```{r str_training,echo=TRUE}
+str(training)
+```
+
+Let's look at the classe variable
+```{r tclasse, echo=TRUE}
+str(training$classe)
+table(training$classe)
+```
+
+Convert calsse & name into factor variable
+## Model Building:
+This
